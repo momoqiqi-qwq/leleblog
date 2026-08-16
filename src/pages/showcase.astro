@@ -1,0 +1,730 @@
+---
+import Layout from "@layouts/Layout.astro";
+import Icon from "@components/Icon.astro";
+import { siteConfig, profileConfig } from "@/config";
+import { getSortedPosts } from "@/utils/content-utils";
+
+const allPosts = await getSortedPosts();
+const recentPosts = allPosts.slice(0, 6);
+const totalPosts = allPosts.length;
+
+const githubUrl = "https://github.com/afoim/fuwari";
+const blogUrl = `https://${siteConfig.customDomain}`;
+
+// Monthly stats for growth chart
+const monthlyData = [
+  { month: "2024-10", count: 7 },
+  { month: "2024-11", count: 4 },
+  { month: "2024-12", count: 1 },
+  { month: "2025-01", count: 1 },
+  { month: "2025-02", count: 2 },
+  { month: "2025-03", count: 3 },
+  { month: "2025-04", count: 7 },
+  { month: "2025-05", count: 7 },
+  { month: "2025-06", count: 5 },
+  { month: "2025-07", count: 16 },
+  { month: "2025-08", count: 19 },
+  { month: "2025-09", count: 17 },
+  { month: "2025-10", count: 5 },
+  { month: "2025-11", count: 11 },
+  { month: "2025-12", count: 3 },
+  { month: "2026-01", count: 13 },
+  { month: "2026-02", count: 14 },
+  { month: "2026-03", count: 7 },
+  { month: "2026-04", count: 6 },
+];
+const maxCount = Math.max(...monthlyData.map(d => d.count));
+
+// Features
+const features = [
+  { icon: "material-symbols:rocket-launch-outline-rounded", title: "高性能静态站点", desc: "基于 Astro 6 构建，极致的加载速度与 SEO 优化", color: "oklch(0.70 0.15 200)" },
+  { icon: "material-symbols:dark-mode-outline-rounded", title: "全局深色主题", desc: "Dark-only 设计 + 彩虹模式，视觉体验出众", color: "oklch(0.70 0.15 270)" },
+  { icon: "material-symbols:search-rounded", title: "全文本地搜索", desc: "离线全文检索，毫秒级响应，无需后端", color: "oklch(0.70 0.15 240)" },
+  { icon: "material-symbols:auto-awesome-outline-rounded", title: "AI 内容增强", desc: "自动生成文章摘要，AI 参与度标注，智能辅助", color: "oklch(0.70 0.15 310)" },
+  { icon: "material-symbols:photo-library-outline-rounded", title: "画廊 & 瀑布流", desc: "Masonry 瀑布流 + 灯箱浏览，图片内容专业展示", color: "oklch(0.70 0.15 30)" },
+  { icon: "material-symbols:code-blocks-outline-rounded", title: "代码块增强", desc: "行号、折叠、复制按钮 + Expressive Code 主题", color: "oklch(0.70 0.15 150)" },
+  { icon: "material-symbols:rss-feed-rounded", title: "RSS & 站点地图", desc: "完整的内容订阅与 SEO 发布能力，即插即用", color: "oklch(0.70 0.15 60)" },
+  { icon: "material-symbols:forum-outline-rounded", title: "社区与友链", desc: "内置论坛、友链、赞助模块，打造完整生态", color: "oklch(0.70 0.15 120)" },
+];
+
+// Roadmap items
+const roadmap = [
+  { status: "done", label: "已完成", title: "全面迁移至 Astro 6", desc: "升级核心框架，获得更快的构建速度与更优的 HMR 体验" },
+  { status: "done", label: "已完成", title: "AI 摘要自动生成", desc: "集成 Gemini API，自动为文章生成 AI 摘要并标注参与度" },
+  { status: "done", label: "已完成", title: "零宽短链系统", desc: "基于零宽字符的隐形短链，可嵌入到任意文本中" },
+  { status: "done", label: "已完成", title: "论坛模块", desc: "内置轻量级社区讨论系统，用户无需注册即可参与" },
+  { status: "active", label: "进行中", title: "多域名镜像支持", desc: "CN / Global 双域名智能切换，降低访问延迟" },
+  { status: "active", label: "进行中", title: "文章差异对比", desc: "展示文章历次更新 diff，完整记录内容演进轨迹" },
+  { status: "todo", label: "计划中", title: "互动式知识图谱", desc: "文章标签与关联可视化，发现知识脉络" },
+  { status: "todo", label: "计划中", title: "评论系统升级", desc: "扩展 Giscus 能力，提升互动体验" },
+];
+
+// Changelog
+const changelog = [
+  { date: "2026-04", version: "v3.x", items: ["自建 CDN 分发能力", "SSHFS 跨系统磁盘映射教程", "项目架构整理"] },
+  { date: "2026-03", version: "v2.9", items: ["Codex 无限剑制！AI Agent 深度体验", "Cloudflare Snippets 超级玩法", "全站访问提速优化"] },
+  { date: "2026-02", version: "v2.8", items: ["Win11 4K 随机性能调优", "原生 Cloudflare 视频托管", "AI 老婆本地化部署教程"] },
+  { date: "2026-01", version: "v2.7", items: ["电子邮件订阅器搭建", "NAT 类型浏览器检测工具", "国内免梯访问 GitHub 方案"] },
+];
+---
+
+<Layout title="项目导航 · 二叉树树" description="《二叉树树》开源技术博客项目导航 - 项目介绍、精选内容、路线图、增长趋势一站查看">
+  <div class="showcase-page min-h-screen">
+
+    <!-- ========== HERO ========== -->
+    <section class="hero-section relative overflow-hidden pt-24 pb-20 px-4">
+      <div class="hero-bg-glow" aria-hidden="true"></div>
+      <div class="hero-grid-pattern" aria-hidden="true"></div>
+
+      <div class="max-w-5xl mx-auto text-center relative z-10">
+        <!-- Badge -->
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-[var(--primary)]/30 bg-[var(--primary)]/10 text-[var(--primary)] text-sm font-medium mb-6 backdrop-blur-sm">
+          <span class="w-2 h-2 rounded-full bg-[var(--primary)] animate-pulse"></span>
+          开源 AI 知识库 · 持续更新中
+        </div>
+
+        <!-- Title -->
+        <h1 class="text-5xl md:text-7xl font-black mb-6 leading-tight">
+          <span class="text-white">《二叉树树》</span>
+          <br />
+          <span class="gradient-text">官方导航</span>
+        </h1>
+
+        <p class="text-xl md:text-2xl text-white/60 max-w-2xl mx-auto mb-10 leading-relaxed">
+          专注 IT / 互联网技术的开源知识库<br />
+          <span class="text-white/40 text-base">Astro 6 · Svelte · Tailwind · 深色主题 · AI 增强</span>
+        </p>
+
+        <!-- Stats Pills -->
+        <div class="flex flex-wrap justify-center gap-4 mb-10">
+          <div class="stat-pill">
+            <Icon name="material-symbols:article-outline-rounded" class="text-[1.2rem] text-[var(--primary)]" />
+            <span class="text-white font-bold text-lg">{totalPosts}+</span>
+            <span class="text-white/50 text-sm">篇文章</span>
+          </div>
+          <div class="stat-pill">
+            <Icon name="material-symbols:update-rounded" class="text-[1.2rem] text-[var(--primary)]" />
+            <span class="text-white font-bold text-lg">持续</span>
+            <span class="text-white/50 text-sm">更新</span>
+          </div>
+          <div class="stat-pill">
+            <Icon name="simple-icons:github" class="text-[1.2rem] text-[var(--primary)]" />
+            <span class="text-white font-bold text-lg">MIT</span>
+            <span class="text-white/50 text-sm">开源</span>
+          </div>
+          <div class="stat-pill">
+            <Icon name="material-symbols:bolt-rounded" class="text-[1.2rem] text-[var(--primary)]" />
+            <span class="text-white font-bold text-lg">Astro 6</span>
+            <span class="text-white/50 text-sm">驱动</span>
+          </div>
+        </div>
+
+        <!-- CTA Buttons -->
+        <div class="flex flex-wrap justify-center gap-4">
+          <a href={blogUrl} class="cta-primary">
+            <Icon name="material-symbols:home-rounded" class="text-[1.2rem]" />
+            访问博客
+          </a>
+          <a href={githubUrl} target="_blank" rel="noopener noreferrer" class="cta-secondary">
+            <Icon name="simple-icons:github" class="text-[1.2rem]" />
+            GitHub 仓库
+            <Icon name="fa6-solid:arrow-up-right-from-square" class="text-[0.85rem] opacity-60" />
+          </a>
+          <a href={`${blogUrl}/rss.xml`} target="_blank" rel="noopener noreferrer" class="cta-ghost">
+            <Icon name="material-symbols:rss-feed-rounded" class="text-[1.2rem]" />
+            RSS 订阅
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== FEATURES ========== -->
+    <section class="section-wrapper py-20 px-4">
+      <div class="max-w-5xl mx-auto">
+        <div class="section-header">
+          <div class="section-badge">核心特性</div>
+          <h2 class="section-title">为什么选择这个项目？</h2>
+          <p class="section-desc">一个功能完备、开箱即用的现代技术博客系统</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-12">
+          {features.map((f) => (
+            <div class="feature-card group">
+              <div class="feature-icon-wrapper" style={`color: ${f.color}; --feature-color: ${f.color}`}>
+                <Icon name={f.icon} class="text-[1.6rem]" />
+              </div>
+              <h3 class="text-white font-bold text-base mt-4 mb-2">{f.title}</h3>
+              <p class="text-white/50 text-sm leading-relaxed">{f.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== GROWTH CHART ========== -->
+    <section class="section-wrapper py-20 px-4 bg-gradient-to-b from-transparent via-[var(--primary)]/[0.03] to-transparent">
+      <div class="max-w-5xl mx-auto">
+        <div class="section-header">
+          <div class="section-badge">增长趋势</div>
+          <h2 class="section-title">内容持续积累中</h2>
+          <p class="section-desc">自 2024 年起活跃更新，累计发布 {totalPosts}+ 篇原创技术文章</p>
+        </div>
+
+        <div class="mt-12 card-glass p-6 md:p-8">
+          <div class="flex items-end gap-1.5 md:gap-2 h-40 mb-3">
+            {monthlyData.map((d) => {
+              const heightPct = Math.max((d.count / maxCount) * 100, 8);
+              return (
+                <div class="chart-bar-wrapper flex-1 flex flex-col items-center gap-1 group">
+                  <span class="text-[10px] text-[var(--primary)] font-bold opacity-0 group-hover:opacity-100 transition-opacity">{d.count}</span>
+                  <div
+                    class="chart-bar w-full rounded-t-sm"
+                    style={`height: ${heightPct}%`}
+                    title={`${d.month}: ${d.count} 篇`}
+                  ></div>
+                </div>
+              );
+            })}
+          </div>
+          <div class="flex gap-1.5 md:gap-2">
+            {monthlyData.map((d) => (
+              <div class="flex-1 text-center">
+                <span class="text-[9px] md:text-[10px] text-white/30 rotate-45 inline-block origin-left whitespace-nowrap" style="transform: rotate(-45deg) translateX(-25%)">
+                  {d.month.replace("20", "'")}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <!-- Summary cards -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-8 pt-6 border-t border-white/10">
+            <div class="text-center">
+              <div class="text-3xl font-black text-[var(--primary)]">{totalPosts}+</div>
+              <div class="text-white/50 text-xs mt-1">累计文章</div>
+            </div>
+            <div class="text-center">
+              <div class="text-3xl font-black text-[var(--primary)]">19</div>
+              <div class="text-white/50 text-xs mt-1">月均最高</div>
+            </div>
+            <div class="text-center">
+              <div class="text-3xl font-black text-[var(--primary)]">2+</div>
+              <div class="text-white/50 text-xs mt-1">年活跃</div>
+            </div>
+            <div class="text-center">
+              <div class="text-3xl font-black text-[var(--primary)]">∞</div>
+              <div class="text-white/50 text-xs mt-1">持续更新</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== FEATURED POSTS ========== -->
+    <section class="section-wrapper py-20 px-4">
+      <div class="max-w-5xl mx-auto">
+        <div class="section-header">
+          <div class="section-badge">精选内容</div>
+          <h2 class="section-title">最新文章</h2>
+          <p class="section-desc">持续输出原创技术内容，覆盖 AI、云计算、网络、开发等领域</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-12">
+          {recentPosts.map((post, i) => {
+            const pubDate = new Date(post.data.published);
+            const dateStr = pubDate.toLocaleDateString("zh-CN", { year: "numeric", month: "2-digit", day: "2-digit" });
+            const firstTag = post.data.tags && post.data.tags.length > 0 ? post.data.tags[0] : null;
+            return (
+              <a
+                href={`${blogUrl}/posts/${post.id}/`}
+                class="post-card group"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <div class="flex items-start justify-between mb-3">
+                  <span class="post-num text-[var(--primary)]/60 text-xs font-mono">#{String(i + 1).padStart(2, "0")}</span>
+                  <Icon name="fa6-solid:arrow-up-right-from-square" class="text-[0.75rem] text-white/20 group-hover:text-[var(--primary)] transition-colors" />
+                </div>
+                <h3 class="text-white font-bold text-base leading-snug mb-3 group-hover:text-[var(--primary)] transition-colors line-clamp-2">
+                  {post.data.title}
+                </h3>
+                <div class="flex items-center gap-2 mt-auto">
+                  <Icon name="material-symbols:calendar-today-outline-rounded" class="text-[0.9rem] text-white/30" />
+                  <span class="text-white/40 text-xs">{dateStr}</span>
+                  {firstTag && (
+                    <span class="ml-auto text-xs px-2 py-0.5 rounded-full bg-[var(--primary)]/10 text-[var(--primary)]/80 border border-[var(--primary)]/20">
+                      {firstTag}
+                    </span>
+                  )}
+                </div>
+              </a>
+            );
+          })}
+        </div>
+
+        <div class="text-center mt-8">
+          <a href={blogUrl} target="_blank" rel="noopener noreferrer" class="cta-secondary">
+            <Icon name="material-symbols:article-outline-rounded" class="text-[1.2rem]" />
+            查看全部 {totalPosts} 篇文章
+            <Icon name="fa6-solid:arrow-up-right-from-square" class="text-[0.85rem] opacity-60" />
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== TECH STACK ========== -->
+    <section class="section-wrapper py-20 px-4 bg-gradient-to-b from-transparent via-[var(--primary)]/[0.03] to-transparent">
+      <div class="max-w-5xl mx-auto">
+        <div class="section-header">
+          <div class="section-badge">技术栈</div>
+          <h2 class="section-title">现代化前端工程</h2>
+          <p class="section-desc">选用业界最优秀的开源工具链，保障性能与开发体验</p>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mt-12">
+          {[
+            { icon: "simple-icons:astro", name: "Astro 6", desc: "核心框架", color: "#FF5D01" },
+            { icon: "simple-icons:svelte", name: "Svelte 5", desc: "交互层", color: "#FF3E00" },
+            { icon: "simple-icons:tailwindcss", name: "Tailwind", desc: "样式系统", color: "#06B6D4" },
+            { icon: "simple-icons:typescript", name: "TypeScript", desc: "类型安全", color: "#3178C6" },
+            { icon: "simple-icons:pnpm", name: "pnpm", desc: "包管理", color: "#F69220" },
+            { icon: "simple-icons:biome", name: "Biome", desc: "代码规范", color: "#60A5FA" },
+          ].map((tech) => (
+            <div class="tech-card text-center">
+              <div class="w-12 h-12 mx-auto mb-3 flex items-center justify-center rounded-xl bg-white/5 border border-white/10">
+                <Icon name={tech.icon} class="text-[1.6rem]" style={`color: ${tech.color}`} />
+              </div>
+              <div class="text-white font-bold text-sm">{tech.name}</div>
+              <div class="text-white/40 text-xs mt-0.5">{tech.desc}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== ROADMAP ========== -->
+    <section class="section-wrapper py-20 px-4">
+      <div class="max-w-5xl mx-auto">
+        <div class="section-header">
+          <div class="section-badge">路线图</div>
+          <h2 class="section-title">我们的发展规划</h2>
+          <p class="section-desc">清晰的发展方向，每一步都有迹可循</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-12">
+          {roadmap.map((item) => (
+            <div class:list={["roadmap-item", `roadmap-${item.status}`]}>
+              <div class="flex items-center gap-3 mb-2">
+                <span class:list={["roadmap-badge", `badge-${item.status}`]}>{item.label}</span>
+                <h3 class="text-white font-bold text-base">{item.title}</h3>
+              </div>
+              <p class="text-white/50 text-sm leading-relaxed ml-0">{item.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== CHANGELOG ========== -->
+    <section class="section-wrapper py-20 px-4 bg-gradient-to-b from-transparent via-[var(--primary)]/[0.03] to-transparent">
+      <div class="max-w-5xl mx-auto">
+        <div class="section-header">
+          <div class="section-badge">更新日志</div>
+          <h2 class="section-title">近期更新记录</h2>
+          <p class="section-desc">定期发布新文章与系统更新，持续为你带来价值</p>
+        </div>
+
+        <div class="mt-12 space-y-4">
+          {changelog.map((entry) => (
+            <div class="changelog-entry card-glass p-6">
+              <div class="flex items-center gap-3 mb-4">
+                <div class="changelog-dot"></div>
+                <span class="text-[var(--primary)] font-bold text-sm font-mono">{entry.date}</span>
+                <span class="text-white/30 text-xs border border-white/10 px-2 py-0.5 rounded-full">{entry.version}</span>
+              </div>
+              <ul class="space-y-2">
+                {entry.items.map((item) => (
+                  <li class="flex items-start gap-2 text-white/60 text-sm">
+                    <Icon name="material-symbols:check-circle-outline-rounded" class="text-[var(--primary)]/60 text-[1rem] mt-0.5 flex-shrink-0" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== OPEN SOURCE CTA ========== -->
+    <section class="section-wrapper py-20 px-4">
+      <div class="max-w-5xl mx-auto">
+        <div class="cta-block relative overflow-hidden rounded-2xl p-8 md:p-12 text-center">
+          <div class="cta-glow" aria-hidden="true"></div>
+          <div class="relative z-10">
+            <div class="w-16 h-16 mx-auto mb-6 flex items-center justify-center rounded-2xl bg-[var(--primary)]/20 border border-[var(--primary)]/30">
+              <Icon name="simple-icons:github" class="text-[2rem] text-[var(--primary)]" />
+            </div>
+            <h2 class="text-3xl md:text-4xl font-black text-white mb-4">完全开源，欢迎参与</h2>
+            <p class="text-white/60 text-lg max-w-xl mx-auto mb-8 leading-relaxed">
+              本项目基于 MIT 协议开源，欢迎 Star、Fork 与贡献。<br />
+              你的每一个 Issue 和 PR 都是对项目最大的支持。
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+              <a href={githubUrl} target="_blank" rel="noopener noreferrer" class="cta-primary">
+                <Icon name="simple-icons:github" class="text-[1.2rem]" />
+                前往 GitHub
+                <Icon name="fa6-solid:arrow-up-right-from-square" class="text-[0.85rem] opacity-70" />
+              </a>
+              <a href={blogUrl} class="cta-secondary">
+                <Icon name="material-symbols:home-rounded" class="text-[1.2rem]" />
+                访问博客首页
+              </a>
+            </div>
+
+            <!-- Author info -->
+            <div class="flex items-center justify-center gap-3 mt-10 pt-8 border-t border-white/10">
+              <img src={profileConfig.avatar} alt={profileConfig.name} class="w-10 h-10 rounded-full border-2 border-[var(--primary)]/40" />
+              <div class="text-left">
+                <div class="text-white font-bold text-sm">{profileConfig.name}</div>
+                <div class="text-white/40 text-xs">{profileConfig.bio}</div>
+              </div>
+              <div class="flex items-center gap-2 ml-4">
+                {profileConfig.links.map((link) => (
+                  <a href={link.url} target="_blank" rel="noopener noreferrer"
+                     class="w-8 h-8 flex items-center justify-center rounded-lg bg-white/5 hover:bg-[var(--primary)]/20 border border-white/10 hover:border-[var(--primary)]/30 transition-all"
+                     aria-label={link.name}
+                  >
+                    <Icon name={link.icon} class="text-[0.9rem] text-white/60 hover:text-[var(--primary)]" />
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="py-8 px-4 border-t border-white/10 text-center">
+      <p class="text-white/30 text-sm">
+        &copy; {new Date().getFullYear()} {profileConfig.name} · 
+        <a href={blogUrl} class="hover:text-[var(--primary)] transition-colors">《二叉树树》</a> · 
+        <a href={githubUrl} target="_blank" rel="noopener noreferrer" class="hover:text-[var(--primary)] transition-colors">GitHub</a> · 
+        MIT License
+      </p>
+    </footer>
+
+  </div>
+</Layout>
+
+<style>
+/* ==================== Base ==================== */
+.showcase-page {
+  background: var(--page-bg);
+}
+
+/* ==================== Hero ==================== */
+.hero-section {
+  background: radial-gradient(ellipse 80% 50% at 50% -20%, oklch(0.25 0.05 var(--hue)), transparent);
+}
+
+.hero-bg-glow {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 60%, oklch(0.70 0.15 var(--hue) / 0.06), transparent 50%),
+    radial-gradient(circle at 80% 40%, oklch(0.70 0.15 calc(var(--hue) + 60) / 0.05), transparent 50%);
+  pointer-events: none;
+}
+
+.hero-grid-pattern {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, white 1px, transparent 1px),
+    linear-gradient(to bottom, white 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.02;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, black 30%, transparent 100%);
+  pointer-events: none;
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, var(--primary), oklch(0.70 0.15 calc(var(--hue) + 60)));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stat-pill {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(8px);
+}
+
+/* ==================== CTAs ==================== */
+.cta-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  background: var(--btn-regular-bg);
+  color: var(--btn-content);
+  font-weight: 700;
+  transition: all 0.2s;
+  font-size: 0.95rem;
+}
+.cta-primary:hover {
+  background: var(--btn-regular-bg-hover);
+  transform: translateY(-1px);
+}
+.cta-primary:active {
+  background: var(--btn-regular-bg-active);
+  transform: translateY(0);
+}
+
+.cta-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: rgba(255,255,255,0.8);
+  font-weight: 700;
+  transition: all 0.2s;
+  font-size: 0.95rem;
+}
+.cta-secondary:hover {
+  background: rgba(255,255,255,0.09);
+  border-color: rgba(255,255,255,0.2);
+  transform: translateY(-1px);
+}
+
+.cta-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  color: rgba(255,255,255,0.5);
+  font-weight: 600;
+  transition: all 0.2s;
+  font-size: 0.95rem;
+  border: 1px solid transparent;
+}
+.cta-ghost:hover {
+  color: rgba(255,255,255,0.8);
+  border-color: rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.04);
+}
+
+/* ==================== Section ==================== */
+.section-header {
+  text-align: center;
+}
+
+.section-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 1rem;
+  border-radius: 9999px;
+  background: var(--primary, #fff);
+  background: oklch(from var(--primary) l c h / 0.12);
+  border: 1px solid oklch(from var(--primary) l c h / 0.25);
+  color: var(--primary);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.section-title {
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+  font-weight: 900;
+  color: white;
+  margin-bottom: 0.75rem;
+  line-height: 1.2;
+}
+
+.section-desc {
+  color: rgba(255,255,255,0.5);
+  font-size: 1.05rem;
+  max-width: 36rem;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+}
+
+/* ==================== Cards ==================== */
+.card-glass {
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 1rem;
+  backdrop-filter: blur(12px);
+}
+
+.feature-card {
+  padding: 1.5rem;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 1rem;
+  transition: all 0.3s;
+  cursor: default;
+}
+.feature-card:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.12);
+  transform: translateY(-2px);
+}
+
+.feature-icon-wrapper {
+  width: 3rem;
+  height: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.75rem;
+  background: color-mix(in oklch, var(--feature-color, var(--primary)) 15%, transparent);
+  border: 1px solid color-mix(in oklch, var(--feature-color, var(--primary)) 30%, transparent);
+}
+
+.post-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 1rem;
+  transition: all 0.25s;
+  min-height: 9rem;
+  text-decoration: none;
+}
+.post-card:hover {
+  background: rgba(255,255,255,0.06);
+  border-color: rgba(255,255,255,0.14);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+}
+
+.tech-card {
+  padding: 1.25rem 0.75rem;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 1rem;
+  transition: all 0.25s;
+}
+.tech-card:hover {
+  background: rgba(255,255,255,0.05);
+  border-color: rgba(255,255,255,0.12);
+  transform: translateY(-2px);
+}
+
+/* ==================== Chart ==================== */
+.chart-bar {
+  background: linear-gradient(to top, var(--primary), oklch(from var(--primary) calc(l + 0.1) c h / 0.7));
+  border-radius: 3px 3px 0 0;
+  transition: opacity 0.2s;
+  min-height: 4px;
+}
+.chart-bar:hover {
+  opacity: 0.85;
+}
+.chart-bar-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: 100%;
+}
+
+/* ==================== Roadmap ==================== */
+.roadmap-item {
+  padding: 1.25rem 1.5rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(255,255,255,0.07);
+  background: rgba(255,255,255,0.03);
+  transition: border-color 0.2s;
+}
+.roadmap-item:hover {
+  border-color: rgba(255,255,255,0.12);
+}
+.roadmap-done {
+  border-left: 3px solid oklch(0.70 0.15 160);
+}
+.roadmap-active {
+  border-left: 3px solid var(--primary);
+}
+.roadmap-todo {
+  border-left: 3px solid rgba(255,255,255,0.15);
+}
+
+.roadmap-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  flex-shrink: 0;
+}
+.badge-done {
+  background: oklch(0.70 0.15 160 / 0.15);
+  color: oklch(0.70 0.15 160);
+  border: 1px solid oklch(0.70 0.15 160 / 0.3);
+}
+.badge-active {
+  background: oklch(from var(--primary) l c h / 0.15);
+  color: var(--primary);
+  border: 1px solid oklch(from var(--primary) l c h / 0.3);
+}
+.badge-todo {
+  background: rgba(255,255,255,0.05);
+  color: rgba(255,255,255,0.4);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* ==================== Changelog ==================== */
+.changelog-dot {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  background: var(--primary);
+  flex-shrink: 0;
+}
+
+/* ==================== CTA Block ==================== */
+.cta-block {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.cta-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 60% at 50% 50%, oklch(from var(--primary) l c h / 0.08), transparent);
+  pointer-events: none;
+}
+
+/* ==================== Animations ==================== */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* ==================== Misc ==================== */
+.line-clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+</style>
