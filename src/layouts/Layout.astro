@@ -131,26 +131,6 @@ const bannerOffset =
         <link rel="preconnect" href="https://support.nodeget.com" />
 	
 
-<script define:vars={{ customDomain: siteConfig.customDomain }}>
-		(function () {
-		var hostname = location.hostname;
-		var port = location.port;
-
-		// 默认端口判断
-		var isDefaultPort =
-			port === "" || port === "80" || port === "443";
-
-		if (hostname !== customDomain && isDefaultPort) {
-			location.replace(
-			`https://${customDomain}` +
-			location.pathname +
-			location.search +
-			location.hash
-			);
-		}
-		})();
-		</script>
-
 
 		
 		
