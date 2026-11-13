@@ -1,3 +1,27 @@
+<div align="center">
+
+<img src="./assets/readme-hero.svg" alt="leleblog" width="1000" />
+
+**二叉树树的博客（基于 Fuwari/Astro，部署于 Cloudflare Pages）**
+
+[![stars](https://img.shields.io/github/stars/momoqiqi-qwq/leleblog?style=for-the-badge&color=f5c518&labelColor=2b2b2b)](https://github.com/momoqiqi-qwq/leleblog/stargazers) ![license](https://img.shields.io/github/license/momoqiqi-qwq/leleblog?style=for-the-badge&color=3da639) ![Svelte](https://img.shields.io/badge/Svelte-FF3E00?style=for-the-badge&logo=svelte&logoColor=white)
+
+</div>
+
+<details>
+<summary><b>目录</b></summary>
+
+- [✨ 项目简介](#项目简介)
+- [🎨 主要特点](#主要特点)
+- [📦 包含模块](#包含模块)
+- [🛠️ 如何使用](#如何使用)
+- [❓ 效果演示](#效果演示)
+- [🙏 贡献](#贡献)
+
+</details>
+
+---
+
 # 二叉树树的博客 · leleblog
 
 ### ✨ 项目简介
