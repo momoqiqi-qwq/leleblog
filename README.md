@@ -1,12 +1,14 @@
 <div align="center">
 
-<img src="./assets/readme-hero.svg" alt="leleblog" width="1000" />
+<img src="./assets/hero.svg" alt="leleblog" width="1000" />
 
 **二叉树树的博客（基于 Fuwari/Astro，部署于 Cloudflare Pages）**
 
 [![stars](https://img.shields.io/github/stars/momoqiqi-qwq/leleblog?style=for-the-badge&color=f5c518&labelColor=2b2b2b)](https://github.com/momoqiqi-qwq/leleblog/stargazers) ![license](https://img.shields.io/github/license/momoqiqi-qwq/leleblog?style=for-the-badge&color=3da639) ![Svelte](https://img.shields.io/badge/Svelte-FF3E00?style=for-the-badge&logo=svelte&logoColor=white)
 
 </div>
+
+---
 
 <details open>
 <summary><b>目录</b></summary>
